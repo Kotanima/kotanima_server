@@ -5,6 +5,9 @@ from url_filter.integrations.drf import DjangoFilterBackend
 from .models import RedditPost, VkPost
 from .serializers import RedditPostSerializer
 
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 
 class RedditPostFilter(ModelFilterSet):
     class Meta(object):
@@ -28,6 +31,34 @@ class RedditPostViewSet(ModelViewSet):
     serializer_class = RedditPostSerializer
     filter_backends = [DjangoFilterBackend]
     filter_class = RedditPostFilter
+
+    def get_approved_queryset(self):
+        qs = RedditPost.objects.all()
+        # exclude posts that were already posted
+        qs = qs.filter(selected=False)
+        qs = qs.filter(dislike=False)
+        return qs
+
+    def get_count_queryset(self):
+        qs = RedditPost.objects.all()
+        # exclude posts that were already posted
+        qs = qs.filter(selected=False)
+        qs = qs.filter(dislike__isnull=True)
+        return qs
+
+    @action(detail=False)
+    def total_count(self, request):
+        queryset = self.filter_queryset(self.get_count_queryset())
+        count = queryset.count()
+        content = {'count': count}
+        return Response(content)
+
+    @action(detail=False)
+    def approved_count(self, request):
+        queryset = self.filter_queryset(self.get_approved_queryset())
+        count = queryset.count()
+        content = {'count': count}
+        return Response(content)
 
 
 class RedditPostEditViewSet(ModelViewSet):
