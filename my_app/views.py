@@ -24,7 +24,7 @@ class RedditPostViewSet(ModelViewSet):
         qs = qs.filter(selected=False)
         qs = qs.filter(wrong_format=False)
         qs = qs.filter(dislike__isnull=True)
-        qs = qs.order_by('?')  # todo rewrite because slow ...
+        # qs = qs.order_by('?')  # todo rewrite because slow ...
         return qs
 
     queryset = RedditPost.objects.all()
