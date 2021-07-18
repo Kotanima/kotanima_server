@@ -1,4 +1,5 @@
 dj_env/
+venv/
 .vscode
 *.pyc
 
