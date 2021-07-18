@@ -20,11 +20,10 @@ class RedditPostViewSet(ModelViewSet):
         # exclude posts that were already posted
         inner_qs = VkPost.objects.values_list('phash', flat=True)
         qs = qs.exclude(phash__in=inner_qs)
-
-        qs = qs.filter(selected=False)
+        qs = qs.filter(is_selected=False)
+        qs = qs.filter(is_downloaded=True)
         qs = qs.filter(wrong_format=False)
-        qs = qs.filter(dislike__isnull=True)
-        # qs = qs.order_by('?')  # todo rewrite because slow ...
+        qs = qs.filter(is_disliked=False)
         return qs
 
     queryset = RedditPost.objects.all()
@@ -34,16 +33,16 @@ class RedditPostViewSet(ModelViewSet):
 
     def get_approved_queryset(self):
         qs = RedditPost.objects.all()
-        # exclude posts that were already posted
-        qs = qs.filter(selected=False)
-        qs = qs.filter(dislike=False)
+        qs = qs.filter(is_checked=False)
+        qs = qs.filter(is_downloaded=True)
+        qs = qs.filter(is_disliked=False)
         return qs
 
     def get_count_queryset(self):
         qs = RedditPost.objects.all()
-        # exclude posts that were already posted
-        qs = qs.filter(selected=False)
-        qs = qs.filter(dislike__isnull=True)
+        qs = qs.filter(is_checked=True)
+        qs = qs.filter(is_downloaded=True)
+        qs = qs.filter(is_disliked=False)
         return qs
 
     @action(detail=False)
