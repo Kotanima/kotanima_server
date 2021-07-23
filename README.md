@@ -12,8 +12,11 @@ In short:
 ## Table of contents
 
 - [General info](#general-info)
+- [Hosting](#hosting)
 - [Technologies](#technologies)
 - [Deployment](#deployment)
+- [License](#license)
+
 
 ## General info
 
