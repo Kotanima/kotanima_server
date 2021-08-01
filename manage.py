@@ -3,6 +3,11 @@
 import os
 import sys
 
+# kill port 8000
+# sudo fuser -k 8000/tcp
+
+# python manage.py runserver
+
 
 def main():
     """Run administrative tasks."""
