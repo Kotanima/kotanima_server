@@ -20,6 +20,7 @@ class RedditPostViewSet(ModelViewSet):
         # exclude posts that were already posted
         inner_qs = VkPost.objects.values_list('phash', flat=True)
         qs = qs.exclude(phash__in=inner_qs)
+        qs = qs.filter(is_checked=False)
         qs = qs.filter(is_selected=False)
         qs = qs.filter(is_downloaded=True)
         qs = qs.filter(wrong_format=False)
